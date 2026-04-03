@@ -8,7 +8,7 @@ const languages = { en, sq, it }
 const LanguageContext = createContext()
 
 export const LanguageProvider = ({ children }) => {
-    const [language, setLanguage] = useState('sq')
+    const [language, setLanguage] = useState('en')
 
     const t = languages[language]
 

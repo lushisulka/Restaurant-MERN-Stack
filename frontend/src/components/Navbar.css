@@ -1,0 +1,210 @@
+:root {
+    --rose: #B26666;
+    --rose-dark: #8f4f4f;
+    --clay: #A67B5B;
+    --dark: #0e0a08;
+    --border: rgba(178, 102, 102, 0.15);
+    --surface: rgba(178, 102, 102, 0.06);
+    --text: #e8ddd5;
+    --muted: rgba(232, 221, 213, 0.5);
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: transparent;
+    border-bottom: none;
+    transform: translateY(0);
+    transition: transform 0.4s ease, background 0.3s ease;
+}
+.navbar.hidden {
+    transform: translateY(-100%);
+}
+
+.navbar.scrolled {
+    background: rgba(14, 10, 8, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+ }
+
+.navbar-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 24px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: white;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.logo-img {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+}
+
+.logo span {
+    font-family: 'Jost', sans-serif;
+    color: white;
+}
+
+.logo span strong {
+    color: var(--clay);
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--rose);
+}
+
+.nav-links a.active {
+    color: var(--rose);
+    position: relative;
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--rose);
+    border-radius: 999px;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.lang-switch {
+    display: flex;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    padding: 4px;
+}
+
+.lang-switch button {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.lang-switch button.active {
+    background: var(--rose);
+    color: white;
+}
+
+.lang-switch button:hover {
+    color: white;
+}
+
+.lang-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.lang-tooltip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    background: rgba(20, 12, 10, 0.95);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateX(-50%) translateY(4px);
+}
+
+.lang-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(20, 12, 10, 0.95);
+}
+
+.lang-item:hover .lang-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.btn {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.login-btn {
+    background: var(--rose);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 22px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.login-btn:hover {
+    background: var(--rose-dark);
+    transform: translateY(-2px);
+}
+
+.logout-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.7);
+    border-radius: 999px;
+    padding: 8px 22px;
+}
+
+.logout-btn:hover {
+    border-color: var(--rose);
+    color: var(--rose);
+}
