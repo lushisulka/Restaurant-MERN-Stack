@@ -12,4 +12,7 @@ api.interceptors.request.use((config) => {
     return config
 })
 
+const authRoutes = require('./routes/auth')
+app.use('/api/auth', authRoutes)
+
 export default api
