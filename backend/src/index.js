@@ -1,35 +1,41 @@
 const express = require('express')
 const cors = require('cors')
 const dotenv = require('dotenv')
-const mongoose = require('mongoose')
-
-const authRoutes = require('./routes/authRoutes')
-const menuRoutes = require('./routes/menuRoutes')
-const orderRoutes = require('./routes/orderRoutes')
-const reviewRoutes = require('./routes/reviewRoutes')
+const { initDB } = require('./config/db')
 
 dotenv.config()
+initDB()
 
 const app = express()
 
-app.use(cors())
+// Middleware
+app.use(cors({
+    origin: true,
+    credentials: true
+}))
 app.use(express.json())
 
-mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log('MongoDB connected!'))
-    .catch((err) => console.log('MongoDB error:', err))
-
-app.use('/api/auth', authRoutes)
-app.use('/api/menu', menuRoutes)
-app.use('/api/orders', orderRoutes)
-app.use('/api/reviews', reviewRoutes)
+// Routes
+app.use('/api/auth', require('./routes/authRoutes'))
+app.use('/api/menu', require('./routes/menuRoutes'))
+app.use('/api/orders', require('./routes/orderRoutes'))
+app.use('/api/reviews', require('./routes/reviewRoutes'))
+app.use('/api/admin', require('./routes/admin'))
 
 app.get('/', (req, res) => {
-    res.json({ message: 'Restaurant API is running!' })
+    res.json({ message: 'Restaurant API is running smoothly...' })
+})
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack)
+    res.status(err.status || 500).json({
+        message: err.message || 'Internal Server Error'
+    })
 })
 
 const PORT = process.env.PORT || 5000
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
-})
+})

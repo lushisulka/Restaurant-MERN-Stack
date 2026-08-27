@@ -1,26 +1,37 @@
 const jwt = require('jsonwebtoken')
+const User = require('../models/User')
 
-const auth = (req, res, next) => {
-    const token = req.header('Authorization')
+// Protect middleware
+exports.protect = async (req, res, next) => {
+    let token
+
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        try {
+            token = req.headers.authorization.split(' ')[1]
+            const decoded = jwt.verify(token, process.env.JWT_SECRET || 'supersecretkey123')
+
+            const user = await User.findById(decoded.id)
+            if (!user) {
+                return res.status(401).json({ message: 'User no longer exists' })
+            }
+
+            req.user = user
+            return next()
+        } catch (error) {
+            return res.status(401).json({ message: 'Not authorized, invalid token' })
+        }
+    }
 
     if (!token) {
-        return res.status(401).json({ message: 'No token' })
+        return res.status(401).json({ message: 'Not authorized, no token provided' })
     }
+}
 
-    try {
-        const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET)
-        req.user = decoded
+// Admin only middleware
+exports.adminOnly = (req, res, next) => {
+    if (req.user && req.user.role === 'admin') {
         next()
-    } catch {
-        res.status(401).json({ message: 'Invalid token' })
+    } else {
+        return res.status(403).json({ message: 'Access denied: Admin privileges required' })
     }
 }
-
-const adminOnly = (req, res, next) => {
-    if (req.user.role !== 'admin') {
-        return res.status(403).json({ message: 'Access denied' })
-    }
-    next()
-}
-
-module.exports = { auth, adminOnly }

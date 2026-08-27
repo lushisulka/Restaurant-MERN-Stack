@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react'
+
 import en from '../locales/en'
 import sq from '../locales/sq'
 import it from '../locales/it'
@@ -10,11 +11,12 @@ const LanguageContext = createContext()
 export const LanguageProvider = ({ children }) => {
     const [language, setLanguage] = useState('en')
 
-    const t = languages[language]
-
     const changeLanguage = (lang) => {
         setLanguage(lang)
     }
+
+    // ✅ safe fallback (shumë e rëndësishme)
+    const t = languages[language] || languages.en
 
     return (
         <LanguageContext.Provider value={{ t, language, changeLanguage }}>

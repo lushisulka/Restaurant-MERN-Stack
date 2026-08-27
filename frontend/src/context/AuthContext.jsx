@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
+import api from '../services/api'
 
 const AuthContext = createContext()
 
@@ -8,11 +9,32 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const savedUser = localStorage.getItem('user')
-        if (savedUser && token) {
-            setUser(JSON.parse(savedUser))
+        const initAuth = async () => {
+            const savedToken = localStorage.getItem('token')
+            const savedUser = localStorage.getItem('user')
+
+            if (savedUser) {
+                try {
+                    setUser(JSON.parse(savedUser))
+                } catch {
+                    localStorage.removeItem('user')
+                }
+            }
+
+            if (savedToken) {
+                try {
+                    const res = await api.get('/auth/me')
+                    setUser(res.data)
+                    localStorage.setItem('user', JSON.stringify(res.data))
+                } catch {
+                    // Token expired or invalid
+                    logout()
+                }
+            }
+            setLoading(false)
         }
-        setLoading(false)
+
+        initAuth()
     }, [])
 
     const login = (userData, userToken) => {

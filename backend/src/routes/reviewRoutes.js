@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const { createReview, getReviewsByMenuItem, deleteReview } = require('../controllers/reviewController')
-const { protect, adminOnly } = require('../middleware/authMiddleware')
+const { createReview, getReviewsByMenuItem, getAllReviews, deleteReview } = require('../controllers/reviewController')
+const { protect } = require('../middleware/authMiddleware')
 
-router.post('/', protect, createReview)
+router.get('/', getAllReviews)
 router.get('/:menuItemId', getReviewsByMenuItem)
-router.delete('/:id', protect, adminOnly, deleteReview)
+router.post('/', protect, createReview)
+router.delete('/:id', protect, deleteReview)
 
-module.exports = router
+module.exports = router
